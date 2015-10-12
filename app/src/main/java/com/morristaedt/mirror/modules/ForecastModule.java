@@ -38,12 +38,14 @@ public class ForecastModule {
                 ForecastRequest service = restAdapter.create(ForecastRequest.class);
                 String excludes = "minutely,daily,flags";
 
-                try {
-                    return service.getHourlyForecast(resources.getString(R.string.dark_sky_api_key), lat, lon, excludes, units);
-                } catch (RetrofitError error) {
-                    Log.w("mirror", "Forecast error: " + error.getMessage());
-                    return null;
-                }
+//                try {
+//                    return service.getHourlyForecast(resources.getString(R.string.dark_sky_api_key), lat, lon, excludes, units);
+//                } catch (RetrofitError error) {
+//                    Log.w("mirror", "Forecast error: " + error.getMessage());
+//                    return null;
+//                }
+
+                return null;
             }
 
             @Override
