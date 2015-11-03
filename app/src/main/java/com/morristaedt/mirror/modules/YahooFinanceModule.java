@@ -45,7 +45,8 @@ public class YahooFinanceModule {
 
                 YahooFinanceRequest service = restAdapter.create(YahooFinanceRequest.class);
 
-                String query = "select * from yahoo.finance.quotes where symbol in (\"" + stockName + "\")";
+                String query = "select * from yahoo.finance.quotes where symbol in (\"" +
+                        stockName + "\")";
                 String env = "http://datatables.org/alltables.env";
                 String format = "json";
                 return service.getStockData(query, env, format);
@@ -54,8 +55,10 @@ public class YahooFinanceModule {
             @Override
             protected void onPostExecute(YahooStockResponse stockResponse) {
                 if (stockResponse != null && stockResponse.getQuoteResponse() != null) {
-                    YahooStockResponse.YahooQuoteResponse quoteResponse = stockResponse.getQuoteResponse();
-                    if (quoteResponse.getPercentageChange().abs().compareTo(BigDecimal.valueOf(0.03)) >= 0) {
+                    YahooStockResponse.YahooQuoteResponse quoteResponse = stockResponse
+                            .getQuoteResponse();
+                    if (quoteResponse.getPercentageChange().abs()
+                            .compareTo(BigDecimal.valueOf(0.03)) >= 0) {
                         listener.onNewStockPrice(quoteResponse);
                         return;
                     }

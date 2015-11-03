@@ -26,7 +26,9 @@ public class ForecastModule {
         void onShouldBike(boolean showToday, boolean shouldBike);
     }
 
-    public static void getHourlyForecast(final Resources resources, final String units, final String lat, final String lon, final ForecastListener listener) {
+    public static void getHourlyForecast(final Resources resources, final String units,
+                                         final String lat, final String lon, final
+                                         ForecastListener listener) {
         new AsyncTask<Void, Void, ForecastResponse>() {
 
             @Override
@@ -38,25 +40,29 @@ public class ForecastModule {
                 ForecastRequest service = restAdapter.create(ForecastRequest.class);
                 String excludes = "minutely,daily,flags";
 
-//                try {
-//                    return service.getHourlyForecast(resources.getString(R.string.dark_sky_api_key), lat, lon, excludes, units);
-//                } catch (RetrofitError error) {
-//                    Log.w("mirror", "Forecast error: " + error.getMessage());
-//                    return null;
-//                }
-
-                return null;
+                try {
+                    return service.getHourlyForecast(resources.getString(R.string
+                            .dark_sky_api_key), lat, lon, excludes, units);
+                } catch (RetrofitError error) {
+                    Log.w("mirror", "Forecast error: " + error.getMessage());
+                    return null;
+                }
             }
 
             @Override
             protected void onPostExecute(ForecastResponse forecastResponse) {
                 if (forecastResponse != null) {
                     if (forecastResponse.currently != null) {
-                        listener.onWeatherToday(forecastResponse.currently.getDisplayTemperature() + " " + forecastResponse.currently.summary);
+                        listener.onWeatherToday(forecastResponse.currently
+                                .getDisplayTemperature() + " " + forecastResponse
+                                .currently.summary);
                     }
 
-                    if (WeekUtil.isWeekday() && !WeekUtil.afterFive() && forecastResponse.hourly != null && forecastResponse.hourly.data != null) {
-                        listener.onShouldBike(true, shouldBikeToday(forecastResponse.hourly.data));
+                    if (WeekUtil.isWeekday() && !WeekUtil.afterFive() &&
+                            forecastResponse.hourly != null && forecastResponse.hourly
+                            .data != null) {
+                        listener.onShouldBike(true, shouldBikeToday(forecastResponse
+                                .hourly.data));
                     } else {
                         listener.onShouldBike(false, true);
                     }
@@ -72,7 +78,8 @@ public class ForecastModule {
                     // Only check hourly forecast for today
                     if (hourCalendar.get(Calendar.DAY_OF_MONTH) == dayOfMonthToday) {
                         int hourOfDay = hourCalendar.get(Calendar.HOUR_OF_DAY);
-                        Log.i("mirror", "Hour of day is " + hourOfDay + " with precipProb " + hour.precipProbability);
+                        Log.i("mirror", "Hour of day is " + hourOfDay + " with " +
+                                "precipProb " + hour.precipProbability);
                         if (hourOfDay >= 7 && hourOfDay <= 11) {
                             if (hour.precipProbability >= 0.3) {
                                 return false;

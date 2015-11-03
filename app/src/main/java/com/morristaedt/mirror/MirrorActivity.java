@@ -66,19 +66,22 @@ public class MirrorActivity extends ActionBarActivity {
         }
     };
 
-    private YahooFinanceModule.StockListener mStockListener = new YahooFinanceModule.StockListener() {
+    private YahooFinanceModule.StockListener mStockListener = new YahooFinanceModule
+            .StockListener() {
         @Override
         public void onNewStockPrice(YahooStockResponse.YahooQuoteResponse quoteResponse) {
             if (quoteResponse == null) {
                 mStockText.setVisibility(View.GONE);
             } else {
                 mStockText.setVisibility(View.VISIBLE);
-                mStockText.setText("$" + quoteResponse.symbol + " $" + quoteResponse.LastTradePriceOnly);
+                mStockText.setText("$" + quoteResponse.symbol + " $" + quoteResponse
+                        .LastTradePriceOnly);
             }
         }
     };
 
-    private ForecastModule.ForecastListener mForecastListener = new ForecastModule.ForecastListener() {
+    private ForecastModule.ForecastListener mForecastListener = new ForecastModule
+            .ForecastListener() {
         @Override
         public void onWeatherToday(String weatherToday) {
             if (!TextUtils.isEmpty(weatherToday)) {
@@ -90,7 +93,8 @@ public class MirrorActivity extends ActionBarActivity {
         @Override
         public void onShouldBike(boolean showToday, boolean shouldBike) {
             mBikeTodayText.setVisibility(showToday ? View.VISIBLE : View.GONE);
-            mBikeTodayText.setText(shouldBike ? R.string.bike_today : R.string.no_bike_today);
+            mBikeTodayText.setText(shouldBike ? R.string.bike_today : R.string
+                    .no_bike_today);
         }
     };
 
@@ -113,19 +117,22 @@ public class MirrorActivity extends ActionBarActivity {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    mMoodText.setVisibility(affirmation == null ? View.GONE : View.VISIBLE);
+                    mMoodText.setVisibility(affirmation == null ? View.GONE : View
+                            .VISIBLE);
                     mMoodText.setText(affirmation);
                 }
             });
         }
     };
 
-    private CalendarModule.CalendarListener mCalendarListener = new CalendarModule.CalendarListener() {
+    private CalendarModule.CalendarListener mCalendarListener = new CalendarModule
+            .CalendarListener() {
         @Override
         public void onCalendarUpdate(String title, String details) {
             mCalendarTitleText.setVisibility(title != null ? View.VISIBLE : View.GONE);
             mCalendarTitleText.setText(title);
-            mCalendarDetailsText.setVisibility(details != null ? View.VISIBLE : View.GONE);
+            mCalendarDetailsText.setVisibility(details != null ? View.VISIBLE : View
+                    .GONE);
             mCalendarDetailsText.setText(details);
 
             //Make marquee effect work for long text
@@ -182,7 +189,8 @@ public class MirrorActivity extends ActionBarActivity {
                     0, 0, -1.0f, 0, 255, //blue
                     0, 0, 0, 1.0f, 0 //alpha
             };
-            ColorFilter colorFilterNegative = new ColorMatrixColorFilter(colorMatrixNegative);
+            ColorFilter colorFilterNegative = new ColorMatrixColorFilter
+                    (colorMatrixNegative);
             mXKCDImage.setColorFilter(colorFilterNegative); // not inverting for now
         }
 
@@ -214,12 +222,18 @@ public class MirrorActivity extends ActionBarActivity {
         }
 
         mDayText.setText(DayModule.getDay());
-//        mHelloText.setText(TimeModule.getTimeOfDayWelcome(getResources())); // not in current design
+//        mHelloText.setText(TimeModule.getTimeOfDayWelcome(getResources())); // not in
+// current design
 
-        mWaterPlants.setVisibility(ChoresModule.waterPlantsToday() ? View.VISIBLE : View.GONE);
-        mGroceryList.setVisibility(ChoresModule.makeGroceryListToday() ? View.VISIBLE : View.GONE);
+        mWaterPlants.setVisibility(ChoresModule.waterPlantsToday() ? View.VISIBLE :
+                View.GONE);
+        mGroceryList.setVisibility(ChoresModule.makeGroceryListToday() ? View.VISIBLE :
+                View.GONE);
 
-        ForecastModule.getHourlyForecast(getResources(), mConfigSettings.getForecastUnits(), mConfigSettings.getLatitude(), mConfigSettings.getLongitude(), mForecastListener);
+        ForecastModule.getHourlyForecast(getResources(), mConfigSettings
+                        .getForecastUnits(),
+                mConfigSettings.getLatitude(), mConfigSettings.getLongitude(),
+                mForecastListener);
 
         if (mConfigSettings.showNewsHeadline()) {
             NewsModule.getNewsHeadline(mNewsListener);
@@ -241,7 +255,8 @@ public class MirrorActivity extends ActionBarActivity {
         }
 
         if (mConfigSettings.showStock() && WeekUtil.isWeekday() && WeekUtil.afterFive()) {
-            YahooFinanceModule.getStockForToday(mConfigSettings.getStockTickerSymbol(), mStockListener);
+            YahooFinanceModule.getStockForToday(mConfigSettings.getStockTickerSymbol(),
+                    mStockListener);
         } else {
             mStockText.setVisibility(View.GONE);
         }
