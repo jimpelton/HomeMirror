@@ -45,6 +45,7 @@
     <string name="found_location">Found location</string>
     <string name="mood_explanation">Uses the front facing camera to read your expression</string>
     <string name="stock_description">Displays on weekdays if the stock swings more than 3%</string>
+    <string name="dark_sky_api_key">be62e9c939c81ba93f256acf4cd01861</string>
 
 
 </resources>

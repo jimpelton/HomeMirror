@@ -6,8 +6,8 @@ android {
 
     defaultConfig {
         applicationId "com.morristaedt.mirror"
-        minSdkVersion 14
-        targetSdkVersion 22
+        minSdkVersion 12
+        targetSdkVersion 20
         versionCode 1
         versionName "1.0"
     }
@@ -33,5 +33,17 @@ dependencies {
     compile 'com.squareup.retrofit:retrofit:1.9.0'
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.github.ahorn:android-rss:cf40b89'
-    compile 'com.google.android.gms:play-services-vision:8.1.0'
+    compile 'com.google.android.gms:play-services-vision:8.3.0'
 }
+
+buildscript {
+    repositories {
+        jcenter()
+    }
+
+    dependencies {
+        classpath 'com.uphyca.gradle:gradle-android-aspectj-plugin:0.9.14'
+    }
+}
+
+apply plugin: 'android-aspectj'

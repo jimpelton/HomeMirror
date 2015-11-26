@@ -74,8 +74,8 @@ public class MirrorActivity extends ActionBarActivity {
                 mStockText.setVisibility(View.GONE);
             } else {
                 mStockText.setVisibility(View.VISIBLE);
-                mStockText.setText("$" + quoteResponse.symbol + " $" + quoteResponse
-                        .LastTradePriceOnly);
+                mStockText.setText("$" + quoteResponse.symbol + " $" +
+                        quoteResponse.LastTradePriceOnly);
             }
         }
     };
