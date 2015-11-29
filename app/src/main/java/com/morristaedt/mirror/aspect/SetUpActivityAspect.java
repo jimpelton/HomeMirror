@@ -5,16 +5,10 @@ import android.util.Log;
 
 import com.morristaedt.mirror.configuration.ConfigurationSettings;
 
-import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.AfterReturning;
-import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Before;
-import org.aspectj.lang.annotation.Pointcut;
 
-import java.util.Arrays;
 
 
 @Aspect
@@ -63,10 +57,9 @@ public class SetUpActivityAspect {
      */
     @AfterReturning(pointcut = "execution(public void ConfigurationSettings.setIsCelsius(boolean)) " +
             "&& this(settings) && args(b)")
-    public void onCreateMirrorActivityAfterReturning(ConfigurationSettings settings, boolean b) {
+    public void afterReturningSetIsCelsius(ConfigurationSettings settings, boolean b) {
         Log.d(TAG, "AfterReturning setIsCelsius(boolean) ==> boolean b: " + b);
         Log.d(TAG, "AfterReturning setIsCelsius(boolean) ==> getIsCelsius(): " + settings.getIsCelsius());
-
     }
 
     /**
@@ -75,11 +68,25 @@ public class SetUpActivityAspect {
      * @param settings
      * @param b
      */
-    @AfterReturning(pointcut = "execution(public void ConfigurationSettings.(boolean)) " +
-            "&& this(settings) && args(b)")
-    public void (ConfigurationSettings settings, boolean b) {
-        Log.d(TAG, "AfterReturning setIsCelsius(boolean) ==> boolean b: " + b);
-        Log.d(TAG, "AfterReturning setIsCelsius(boolean) ==> getIsCelsius(): " + settings.getIsCelsius());
+//    @AfterReturning(pointcut = "execution(public void ConfigurationSettings.(boolean)) " +
+//            "&& this(settings) && args(b)")
+//    public void (ConfigurationSettings settings, boolean b) {
+//        Log.d(TAG, "AfterReturning setIsCelsius(boolean) ==> boolean b: " + b);
+//        Log.d(TAG, "AfterReturning setIsCelsius(boolean) ==> getIsCelsius(): " + settings.getIsCelsius());
+//
+//    }
 
+
+    /**
+     * Property 4
+     */
+    @After("execution(public void ConfigurationSettings.setShowNewsHeadline(boolean)) " +
+            "&& args(b)")
+    public void afterSetShowNewsHeadline(boolean b){
+        if (b) {
+
+        } else {
+
+        }
     }
 }
