@@ -34,8 +34,6 @@ import java.lang.ref.WeakReference;
 
 public class MirrorActivity extends ActionBarActivity {
 
-    private static final boolean DEMO_MODE = false;
-
     @NonNull
     private ConfigurationSettings mConfigSettings;
 
@@ -74,8 +72,7 @@ public class MirrorActivity extends ActionBarActivity {
                 mStockText.setVisibility(View.GONE);
             } else {
                 mStockText.setVisibility(View.VISIBLE);
-                mStockText.setText("$" + quoteResponse.symbol + " $" +
-                        quoteResponse.LastTradePriceOnly);
+                mStockText.setText("$" + quoteResponse.symbol + " $" + quoteResponse.LastTradePriceOnly);
             }
         }
     };
@@ -92,9 +89,12 @@ public class MirrorActivity extends ActionBarActivity {
 
         @Override
         public void onShouldBike(boolean showToday, boolean shouldBike) {
-            mBikeTodayText.setVisibility(showToday ? View.VISIBLE : View.GONE);
-            mBikeTodayText.setText(shouldBike ? R.string.bike_today : R.string
-                    .no_bike_today);
+            if (mConfigSettings.showBikingHint()) {
+                mBikeTodayText.setVisibility(showToday ? View.VISIBLE : View.GONE);
+                mBikeTodayText.setText(shouldBike ? R.string.bike_today : R.string.no_bike_today);
+            } else {
+                mBikeTodayText.setVisibility(View.GONE);
+            }
         }
     };
 
@@ -117,8 +117,7 @@ public class MirrorActivity extends ActionBarActivity {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    mMoodText.setVisibility(affirmation == null ? View.GONE : View
-                            .VISIBLE);
+                    mMoodText.setVisibility(affirmation == null ? View.GONE : View.VISIBLE);
                     mMoodText.setText(affirmation);
                 }
             });
@@ -131,8 +130,7 @@ public class MirrorActivity extends ActionBarActivity {
         public void onCalendarUpdate(String title, String details) {
             mCalendarTitleText.setVisibility(title != null ? View.VISIBLE : View.GONE);
             mCalendarTitleText.setText(title);
-            mCalendarDetailsText.setVisibility(details != null ? View.VISIBLE : View
-                    .GONE);
+            mCalendarDetailsText.setVisibility(details != null ? View.VISIBLE : View.GONE);
             mCalendarDetailsText.setText(details);
 
             //Make marquee effect work for long text
@@ -251,9 +249,8 @@ public class MirrorActivity extends ActionBarActivity {
             mCalendarDetailsText.setVisibility(View.GONE);
         }
 
-        if (mConfigSettings.showStock() && WeekUtil.isWeekday() && WeekUtil.afterFive()) {
-            YahooFinanceModule.getStockForToday(mConfigSettings.getStockTickerSymbol(),
-                    mStockListener);
+        if (mConfigSettings.showStock() && (ConfigurationSettings.isDemoMode() || WeekUtil.isWeekdayAfterFive())) {
+            YahooFinanceModule.getStockForToday(mConfigSettings.getStockTickerSymbol(), mStockListener);
         } else {
             mStockText.setVisibility(View.GONE);
         }
@@ -266,18 +263,10 @@ public class MirrorActivity extends ActionBarActivity {
         }
     }
 
-    private void showDemoMode() {
-        if (DEMO_MODE) {
-            mBikeTodayText.setVisibility(View.VISIBLE);
-            mStockText.setVisibility(View.VISIBLE);
-            mWaterPlants.setVisibility(View.VISIBLE);
-            mGroceryList.setVisibility(View.VISIBLE);
-        }
-    }
-
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+        AlarmReceiver.stopMirrorUpdates(this);
         Intent intent = new Intent(this, SetUpActivity.class);
         startActivity(intent);
     }

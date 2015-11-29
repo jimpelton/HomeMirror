@@ -10,6 +10,7 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.CheckBox;
@@ -36,6 +37,7 @@ public class SetUpActivity extends Activity {
     private Location mLocation;
 
     private RadioGroup mTemperatureChoice;
+    private CheckBox mBikingCheckbox;
     private CheckBox mMoodDetectionCheckbox;
     private CheckBox mShowNextCaledarEventCheckbox;
     private CheckBox mShowNewsHeadlineCheckbox;
@@ -55,6 +57,9 @@ public class SetUpActivity extends Activity {
 
         mTemperatureChoice = (RadioGroup) findViewById(R.id.temperature_group);
         mTemperatureChoice.check(mConfigSettings.getIsCelsius() ? R.id.celsius : R.id.farenheit);
+
+        mBikingCheckbox = (CheckBox) findViewById(R.id.biking_checkbox);
+        mBikingCheckbox.setChecked(mConfigSettings.showBikingHint());
 
         mMoodDetectionCheckbox = (CheckBox) findViewById(R.id.mood_detection_checkbox);
         mMoodDetectionCheckbox.setChecked(mConfigSettings.showMoodDetection());
@@ -110,7 +115,12 @@ public class SetUpActivity extends Activity {
         Criteria criteria = new Criteria();
         criteria.setAccuracy(Criteria.ACCURACY_COARSE);
         String provider = mLocationManager.getBestProvider(criteria, true);
-        mLocation = mLocationManager.getLastKnownLocation(provider);
+
+        try {
+            mLocation = mLocationManager.getLastKnownLocation(provider);
+        } catch (IllegalArgumentException e) {
+            Log.e("SetUpActivity", "Location manager could not use provider", e);
+        }
 
         if (mLocation == null) {
             mLocationView.setVisibility(View.VISIBLE);
@@ -151,6 +161,7 @@ public class SetUpActivity extends Activity {
 
     private void saveFields() {
         mConfigSettings.setIsCelsius(mTemperatureChoice.getCheckedRadioButtonId() == R.id.celsius);
+        mConfigSettings.setShowBikingHint(mBikingCheckbox.isChecked());
         mConfigSettings.setShowMoodDetection(mMoodDetectionCheckbox.isChecked());
         mConfigSettings.setShowNextCalendarEvent(mShowNextCaledarEventCheckbox.isChecked());
         mConfigSettings.setShowNewsHeadline(mShowNewsHeadlineCheckbox.isChecked());

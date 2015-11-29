@@ -1,20 +1,39 @@
+buildscript {
+    repositories {
+        maven { url 'https://maven.fabric.io/public' }
+    }
+
+    dependencies {
+        classpath 'io.fabric.tools:gradle:1.+'
+    }
+}
 apply plugin: 'com.android.application'
+apply plugin: 'io.fabric'
 
 android {
+    signingConfigs {
+        mirror {
+        }
+    }
+    buildToolsVersion "23.0.1"
     compileSdkVersion 22
-    buildToolsVersion '22.0.1'
 
     defaultConfig {
         applicationId "com.morristaedt.mirror"
-        minSdkVersion 12
-        targetSdkVersion 20
-        versionCode 1
-        versionName "1.0"
+        minSdkVersion 14
+        targetSdkVersion 22
+        versionCode 2
+        versionName "1.1"
     }
     buildTypes {
+        debug {
+            ext.enableCrashlytics = false
+            applicationIdSuffix '.debug'
+        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.mirror
         }
     }
     compileOptions {
@@ -25,6 +44,7 @@ android {
 
 repositories {
     maven { url "https://jitpack.io" }
+    maven { url 'https://maven.fabric.io/public' }
 }
 
 dependencies {
@@ -34,6 +54,19 @@ dependencies {
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.github.ahorn:android-rss:cf40b89'
     compile 'com.google.android.gms:play-services-vision:8.3.0'
+    compile('com.crashlytics.sdk.android:crashlytics:2.5.2@aar') {
+        transitive = true;
+    }
+}
+
+def signingFile = rootProject.file('signing.properties')
+if (signingFile.exists()) {
+    def props = new Properties()
+    props.load(new FileInputStream(signingFile))
+    android.signingConfigs.mirror.storeFile rootProject.file(props.keyStore)
+    android.signingConfigs.mirror.storePassword props.keyStorePassword
+    android.signingConfigs.mirror.keyAlias props.keyAlias
+    android.signingConfigs.mirror.keyPassword props.keyAliasPassword
 }
 
 buildscript {
