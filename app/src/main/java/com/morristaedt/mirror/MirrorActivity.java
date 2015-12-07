@@ -64,8 +64,7 @@ public class MirrorActivity extends ActionBarActivity {
         }
     };
 
-    private YahooFinanceModule.StockListener mStockListener = new YahooFinanceModule
-            .StockListener() {
+    private YahooFinanceModule.StockListener mStockListener = new YahooFinanceModule.StockListener() {
         @Override
         public void onNewStockPrice(YahooStockResponse.YahooQuoteResponse quoteResponse) {
             if (quoteResponse == null) {
@@ -77,8 +76,7 @@ public class MirrorActivity extends ActionBarActivity {
         }
     };
 
-    private ForecastModule.ForecastListener mForecastListener = new ForecastModule
-            .ForecastListener() {
+    private ForecastModule.ForecastListener mForecastListener = new ForecastModule.ForecastListener() {
         @Override
         public void onWeatherToday(String weatherToday) {
             if (!TextUtils.isEmpty(weatherToday)) {
@@ -124,8 +122,7 @@ public class MirrorActivity extends ActionBarActivity {
         }
     };
 
-    private CalendarModule.CalendarListener mCalendarListener = new CalendarModule
-            .CalendarListener() {
+    private CalendarModule.CalendarListener mCalendarListener = new CalendarModule.CalendarListener() {
         @Override
         public void onCalendarUpdate(String title, String details) {
             mCalendarTitleText.setVisibility(title != null ? View.VISIBLE : View.GONE);

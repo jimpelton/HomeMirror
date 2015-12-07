@@ -17,13 +17,7 @@ import org.aspectj.lang.annotation.Aspect;
 @Aspect
 public class ForecastIORequestsAspect {
     private static final String TAG = ForecastIORequestsAspect.class.getName();
-    /**
-     * Time of first call to getHourlyForecast.
-     * (This is actually the epoch time when this class is loaded by the class
-     * loader..I'm banking on the fact that it will be very, very close to the
-     * actual first call to getHourlyForecast).
-     */
-//    public static long startTimeMillis = System.currentTimeMillis();
+
     public static long endTimeMillis = System.currentTimeMillis() + (24*3600*1000);
 
     private static int numRequests = 0;

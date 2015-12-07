@@ -48,7 +48,8 @@ public class XKCDModule {
             }
 
             @Override
-            protected void onPostExecute(@Nullable XKCDResponse xkcdResponse) {
+//            protected void onPostExecute(@Nullable XKCDResponse xkcdResponse) {
+              protected void onPostExecute(XKCDResponse xkcdResponse) {
                 if (xkcdResponse != null && !TextUtils.isEmpty(xkcdResponse.img)) {
                     if (ConfigurationSettings.isDemoMode() || isTodaysXKCD(xkcdResponse)) {
                         listener.onNewXKCDToday(xkcdResponse.img);

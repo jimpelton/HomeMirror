@@ -42,8 +42,7 @@ public class ForecastModule {
                 String excludes = "minutely,daily,flags";
 
                 try {
-                    return service.getHourlyForecast(resources.getString(R.string
-                            .dark_sky_api_key), lat, lon, excludes, units);
+                    return service.getHourlyForecast(resources.getString(R.string.dark_sky_api_key), lat, lon, excludes, units);
                 } catch (RetrofitError error) {
                     Log.w("ForecastModule", "Forecast error: " + error.getMessage());
                     return null;
