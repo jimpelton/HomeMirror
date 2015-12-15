@@ -12,14 +12,30 @@ import org.aspectj.lang.annotation.Aspect;
  * If REST requests to https://api.forecast.io exceed 1000 requests in one day, then no
  * further requests are made.
  *
- * Created by jim on 11/28/15.
+ *
+ * The 1000 requests comes from the limit the site places on free api requests.
+ *
+ *
+ * As is, this aspect represents more of an academic experiment rather than anything that would
+ * ever be put into production (actually, most of these aspects probably do...kinda sad).
+ * This test does not consider the success of the query, only that an attempt was made. If this
+ * code were to be put into production, likely we don't want to count non-successful requests
+ * (such as if the internet was down).
+ *
+ *
+ * Likely this 1000 request limit will never be reached because requests only happen when the AlarmReciever
+ * actually broadcasts a time-to-update signal, which is hardcoded at 10 minutes--but perhaps this
+ * could provide a useful regression test (in case the limit got changed inadvertently).
+ *
  */
 @Aspect
 public class ForecastIORequestsAspect {
     private static final String TAG = ForecastIORequestsAspect.class.getName();
 
+    /** The time 24 hours from now */
     public static long endTimeMillis = System.currentTimeMillis() + (24*3600*1000);
 
+    /** Num requests made. */
     private static int numRequests = 0;
     private static final int MAX_FORECAST_IO_REQUESTS = 1000;
 

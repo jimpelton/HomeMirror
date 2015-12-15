@@ -28,9 +28,7 @@ public class YahooFinanceModule {
      * @param listener
      */
     public static void getStockForToday(final String stockName, final StockListener listener) {
-
         new AsyncTask<Void, Void, YahooStockResponse>() {
-
             @Override
             protected YahooStockResponse doInBackground(Void... params) {
                 RestAdapter restAdapter = new RestAdapter.Builder()
@@ -49,7 +47,6 @@ public class YahooFinanceModule {
                     return null;
                 }
             }
-
             @Override
             protected void onPostExecute(@Nullable YahooStockResponse stockResponse) {
                 if (stockResponse != null && stockResponse.getQuoteResponse() != null) {

@@ -7,6 +7,7 @@ import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 
 import android.os.AsyncTask;
@@ -40,6 +41,10 @@ import java.util.List;
 public class RequestResponseSequenceAspect {
     public static final String TAG = RequestResponseSequenceAspect.class.toString();
 
+    /**
+     * I think, that the way android executor service works is single threaded? And, that this
+     * should never get more than one long. But maybe...not...must read more SDK code!
+     */
     private static List<Object> tasks = Collections.synchronizedList(new ArrayList<>());
 
     /**
@@ -75,17 +80,17 @@ public class RequestResponseSequenceAspect {
 
 
     /**
-     *
+     * Before onPostExecute() is executed, check to see if response was the one generated
+     * during execution of doInBackground(). If yes, remove the response.
      */
-    @After("onPostExecutePointcut(response)")
+    @Before("onPostExecutePointcut(response)")
     public void afterOnPostExecute(JoinPoint joinPoint, Object response) {
         Log.d(TAG, "inside: afterOnPostExecute() Entering with target list: " + tasks.toString());
-        //Object target = joinPoint.getTarget();
         if (tasks.contains(response)) {
             Log.d(TAG, "Yay! " + response + " visited here recently!");
             tasks.remove(response);
         } else {
-            Log.d(TAG, "Ouch! The target was never here!");
+            Log.e(TAG, "Response " + response + " was not inserted into responses list!");
         }
         Log.d(TAG, "inside: afterOnPostExecute() Exiting with target list: " + tasks.toString());
     }
